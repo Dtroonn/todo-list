@@ -1,26 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import startDB from './server/db';
+import addCategory from './server/transactions/categories/addCategory';
+import { getAllCategories } from './server/transactions/categories/getAllCategories';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    React.useEffect(() => {
+        const start = async () => {
+            const result = await startDB();
+            console.log(result);
+            getAllCategories();
+        };
+
+        start();
+    }, []);
+
+    const handleClick = async () => {
+        const category = await addCategory('lalka');
+        console.log(category);
+    };
+    return (
+        <div className="App">
+            <button onClick={handleClick}>Добавить новую категорию</button>
+        </div>
+    );
 }
 
 export default App;
