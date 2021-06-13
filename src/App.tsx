@@ -1,4 +1,10 @@
 import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+
+import { Header } from './components/header';
+import { CategoriesPage } from './pages/Categories';
+import { NotFoundPage } from './pages/NotFound';
+import { TodosPage } from './pages/Todos';
 
 import startDB from './server/db';
 import CategoryService from './server/services/CategoryService';
@@ -60,16 +66,24 @@ const App: React.FC = () => {
         await TodoService.delete(1);
     };
     return (
-        <div className="App">
-            <button onClick={handleClick}>Добавить новую категорию</button>
-            <button onClick={onUpdateClick}>Обновить категорию</button>
-            <button onClick={onDeleteClick}>Удалить категорию</button>
-            <div>
-                <button onClick={onCreateTodoClick}>Добавить новое todo</button>
-                <button onClick={onUpdateTodoClick}>Обновить todo</button>
-                <button onClick={onDeleteTodoClick}>Удалить todo</button>
+        <Router>
+            <div className="App">
+                <div className="wrapper">
+                    <Header />
+                    <main>
+                        <Switch>
+                            <Route exact path="/">
+                                <Redirect to="/todos" />
+                            </Route>
+                            <Route exact path="/categories" component={CategoriesPage} />
+                            <Route exact path="/todos" component={TodosPage} />
+                            <Route exact path="/notFound" component={NotFoundPage} />
+                            <Redirect to="/notFound" />
+                        </Switch>
+                    </main>
+                </div>
             </div>
-        </div>
+        </Router>
     );
 };
 
