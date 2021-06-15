@@ -1,9 +1,11 @@
 import React from 'react';
 
+import { List } from '../../components/List';
+
 export const CategoriesPage = () => {
     return (
-        <div>
-            <div className="container">страница категорий</div>
-        </div>
+        <>
+            <List />
+        </>
     );
 };

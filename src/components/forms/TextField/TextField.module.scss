@@ -1,0 +1,47 @@
+.textField {
+    position: relative;
+    .label {
+        font-size: 18px;
+        color: #3f72af;
+        position: absolute;
+        top: -9px;
+        left: 12px;
+        background: #dbe2ef;
+        &.required {
+            &::after {
+                content: '*';
+                color: #ec1d1d;
+            }
+        }
+    }
+    .input {
+        width: 100%;
+        display: block;
+        appearance: none;
+        border: 2px solid #3f72af;
+        border-radius: 4px !important;
+        font-size: 16px;
+        height: 46px;
+        background: transparent;
+        font-size: 20px;
+        padding: 16px 8px;
+        &::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+        }
+        &:focus {
+            &::placeholder {
+                font-size: 0;
+            }
+            & ~ div {
+                display: block;
+            }
+        }
+    }
+
+    .validateText {
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 16px;
+        margin: 6px 0 0 0;
+        display: none;
+    }
+}

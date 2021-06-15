@@ -33,7 +33,7 @@ export const Header = () => {
                         <div className={classes.addButton}>Добавить задачу</div>
                     </Route>
                     <Route path="/categories">
-                        <div className={classes.addButton}>Добавить категорию</div>
+                        <button className={classes.addButton}>Добавить категорию</button>
                     </Route>
                 </div>
             </div>

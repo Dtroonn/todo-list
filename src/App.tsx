@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
-import { Header } from './components/header';
+import { Header } from './components/Header';
+import { Popups } from './components/Popups';
 import { CategoriesPage } from './pages/Categories';
 import { NotFoundPage } from './pages/NotFound';
 import { TodosPage } from './pages/Todos';
@@ -81,6 +82,7 @@ const App: React.FC = () => {
                             <Redirect to="/notFound" />
                         </Switch>
                     </main>
+                    <Popups />
                 </div>
             </div>
         </Router>
