@@ -1,0 +1,43 @@
+.body {
+    position: relative;
+    .textarea {
+        border: 2px solid #3f72af;
+        border-radius: 4px;
+        resize: none;
+        height: 72px;
+        padding: 8px;
+        width: 100%;
+        font-size: 20px;
+        line-height: 24px;
+        background: transparent;
+        &::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+        }
+        &:focus {
+            &::placeholder {
+                font-size: 0;
+            }
+            & ~ div {
+                display: block;
+            }
+        }
+    }
+    .label {
+        color: #3f72af;
+        font-size: 18px;
+        position: absolute;
+        top: -9px;
+        left: 12px;
+        background: #dbe2ef;
+    }
+
+    .validateText {
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 16px;
+        margin: 6px 0 0 0;
+        display: none;
+        &.show {
+            display: block !important;
+        }
+    }
+}

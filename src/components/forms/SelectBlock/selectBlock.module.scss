@@ -1,0 +1,65 @@
+@import '../../../styles/variables.scss';
+
+.selectBlock {
+}
+
+.body {
+    position: relative;
+    .header {
+        display: flex;
+        align-items: center;
+        border: 2px solid #3f72af;
+        border-radius: 4px;
+        padding: 11px 8px;
+        cursor: pointer;
+        justify-content: space-between;
+        position: relative;
+        .title {
+            font-size: 20px;
+            &.placeholder {
+                color: rgba(0, 0, 0, 0.5);
+            }
+        }
+        .icon {
+            margin: 0 0 -5px 15px;
+        }
+        .label {
+            color: #3f72af;
+            font-size: 18px;
+            position: absolute;
+            top: -11px;
+            left: 12px;
+            background: #dbe2ef;
+        }
+    }
+
+    .list {
+        position: absolute;
+        z-index: 2;
+        background: #3f72af;
+        top: 48px;
+        left: 0;
+        width: 100%;
+        border-radius: 4px;
+        display: none;
+        height: 100px;
+        overflow-y: auto;
+        &.open {
+            display: block;
+        }
+        .listItem {
+            font-size: 16px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.4s ease 0s;
+            &:hover {
+                @media (min-width: $md2+px) {
+                    background: #dbe2ef;
+                }
+            }
+        }
+    }
+}
+
+.selectForm {
+}

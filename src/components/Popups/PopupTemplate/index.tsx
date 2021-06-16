@@ -24,10 +24,10 @@ export const PopupTemplate: React.FC<PopupTemplateProps> = ({
             <div
                 className={clsx(
                     {
-                        [classes.content]: true,
                         [classes.active]: open,
                     },
                     contentClassName,
+                    classes.content,
                 )}>
                 <div className={classes.title}>{title}</div>
                 <div className={classes.body}>{children}</div>

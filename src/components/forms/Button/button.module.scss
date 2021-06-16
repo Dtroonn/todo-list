@@ -1,0 +1,17 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
+    padding: 0 15px;
+    border-radius: 4px;
+    font-size: 20px;
+    &.primary {
+        background: #3f72af;
+        color: #fff;
+    }
+    &.outlined {
+        color: #3f72af;
+        border: 2px solid #3f72af;
+    }
+}
