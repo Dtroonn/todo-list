@@ -10,6 +10,7 @@ interface TextareaProps {
     triggerValidateText?: boolean;
     placeholder?: string;
     id?: string;
+    readOnly?: boolean;
     onChange?: (...event: any[]) => void;
 }
 

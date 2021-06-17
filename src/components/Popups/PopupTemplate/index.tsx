@@ -3,10 +3,11 @@ import React from 'react';
 
 import classes from './popupTemplate.module.scss';
 
-interface PopupTemplateProps {
+export interface PopupTemplateProps {
     open: boolean;
     title: string;
     contentClassName?: string;
+    onClose?: () => void;
 }
 
 export const PopupTemplate: React.FC<PopupTemplateProps> = ({
@@ -14,14 +15,17 @@ export const PopupTemplate: React.FC<PopupTemplateProps> = ({
     title,
     contentClassName,
     children,
+    onClose,
 }) => {
     return (
         <div
+            onClick={onClose}
             className={clsx({
                 [classes.popup]: true,
                 [classes.active]: open,
             })}>
             <div
+                onClick={(e) => e.stopPropagation()}
                 className={clsx(
                     {
                         [classes.active]: open,
@@ -31,7 +35,7 @@ export const PopupTemplate: React.FC<PopupTemplateProps> = ({
                 )}>
                 <div className={classes.title}>{title}</div>
                 <div className={classes.body}>{children}</div>
-                <button className={classes.closeButton}>
+                <button onClick={onClose} className={classes.closeButton}>
                     <svg
                         width="24"
                         height="24"

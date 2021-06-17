@@ -1,47 +1,49 @@
 import clsx from 'clsx';
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 
 import classes from './selectBlock.module.scss';
-
-const items: Array<any> = [
-    { name: 'Задача1', value: 'Zadacha1' },
-    { name: 'Задача2', value: 'Zadacha2' },
-    { name: 'Задача3', value: 'Zadacha3' },
-    { name: 'Задача4', value: 'Zadacha4' },
-];
 
 const emptyOptionText = 'Не выбрано';
 
 interface SelectBlockProps {
     label?: string;
     placeholder?: string;
+    items?: Array<any>;
+    disabled?: boolean;
     onChange?: (...event: any[]) => void;
 }
 
-export const SelectBlock: React.FC<SelectBlockProps> = ({ placeholder, label, onChange }) => {
+export const SelectBlock: React.FC<SelectBlockProps> = ({
+    placeholder,
+    label,
+    items = [],
+    disabled,
+    onChange,
+}) => {
     const [selectedValue, setSelectedValue] = React.useState<string | number>('');
     const [open, setOpen] = React.useState<boolean>(false);
-    const selectRef = React.useRef(null);
+    const selectRef = React.useRef<HTMLDivElement>(null);
 
     const toggleOpen = () => setOpen((open) => !open);
 
     let titleText = selectedValue
-        ? items.find((item) => item.value === selectedValue).name
+        ? items.find((item) => item.id === selectedValue).name
         : placeholder
         ? placeholder
         : emptyOptionText;
 
-    const onSelectValue = (value: string | number) => {
-        setSelectedValue(value);
+    const onSelectValue = (id: string | number) => {
+        setSelectedValue(id);
         setOpen(false);
         if (onChange) {
-            onChange(value);
+            onChange(id);
         }
     };
 
     React.useEffect(() => {
         const handleOutsideClick = (e: MouseEvent): void => {
             const path = e.composedPath();
+
             if (!path.includes(selectRef.current as unknown as EventTarget)) {
                 setOpen(false);
             }
@@ -53,7 +55,9 @@ export const SelectBlock: React.FC<SelectBlockProps> = ({ placeholder, label, on
     }, []);
 
     return (
-        <div ref={selectRef} className={classes.selectBlock}>
+        <div
+            ref={selectRef}
+            className={clsx({ [classes.disabled]: disabled }, classes.selectBlock)}>
             <div className={classes.body}>
                 <div onClick={toggleOpen} className={classes.header}>
                     <div
@@ -80,11 +84,11 @@ export const SelectBlock: React.FC<SelectBlockProps> = ({ placeholder, label, on
                         <li
                             key={index}
                             className={classes.listItem}
-                            onClick={() => onSelectValue(item.value)}>
+                            onClick={() => onSelectValue(item.id)}>
                             {item.name}
                         </li>
                     ))}
-                    <li className={classes.listItem} onClick={() => onSelectValue('')}>
+                    <li className={classes.listItem} onClick={() => onSelectValue(0)}>
                         {emptyOptionText}
                     </li>
                 </ul>

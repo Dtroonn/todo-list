@@ -1,9 +1,13 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { NavLink, Route } from 'react-router-dom';
+import { setIsOpenCreateCategoryPopup } from '../../reduxToolkit/reducers/categories';
+import { setIsOpenCreateTodoPopup } from '../../reduxToolkit/reducers/todos';
 
 import classes from './header.module.scss';
 
 export const Header = () => {
+    const dispatch = useDispatch();
     return (
         <header className={classes.header}>
             <div className="container">
@@ -30,10 +34,18 @@ export const Header = () => {
                         </ul>
                     </nav>
                     <Route path="/todos">
-                        <div className={classes.addButton}>Добавить задачу</div>
+                        <div
+                            onClick={() => dispatch(setIsOpenCreateTodoPopup(true))}
+                            className={classes.addButton}>
+                            Добавить задачу
+                        </div>
                     </Route>
                     <Route path="/categories">
-                        <button className={classes.addButton}>Добавить категорию</button>
+                        <button
+                            onClick={() => dispatch(setIsOpenCreateCategoryPopup(true))}
+                            className={classes.addButton}>
+                            Добавить категорию
+                        </button>
                     </Route>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 export interface TodoData {
     name: string;
     description?: string;
-    categoryId?: number | null;
+    categoryId?: number;
 }
 
 export interface Todo extends TodoData {

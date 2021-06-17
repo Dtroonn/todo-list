@@ -6,10 +6,19 @@ import classes from './button.module.scss';
 interface ButtonProps {
     variant: 'primary' | 'outlined';
     className?: string;
+    disabled?: boolean;
+    loading?: boolean;
     onClick?: (...event: any[]) => void;
 }
 
-export const Button: React.FC<ButtonProps> = ({ children, variant, className, onClick }) => {
+export const Button: React.FC<ButtonProps> = ({
+    children,
+    variant,
+    className,
+    onClick,
+    disabled,
+    loading,
+}) => {
     return (
         <button
             onClick={onClick}
@@ -17,11 +26,12 @@ export const Button: React.FC<ButtonProps> = ({ children, variant, className, on
                 {
                     [classes.primary]: variant === 'primary',
                     [classes.outlined]: variant === 'outlined',
+                    [classes.disabled]: disabled || loading,
                 },
                 classes.button,
                 className,
             )}>
-            {children}
+            {loading ? <div className={classes.loadingSpinner}></div> : children}
         </button>
     );
 };

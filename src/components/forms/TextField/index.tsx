@@ -13,6 +13,7 @@ interface TextFieldProps {
     error?: boolean;
     triggerValidateText?: boolean;
     id?: string;
+    readOnly?: boolean;
     onChange?: (...event: any[]) => void;
 }
 

@@ -1,0 +1,18 @@
+.body {
+    .text {
+        font-size: 20px;
+        line-height: 24px;
+        margin: 0 0 24px;
+    }
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        margin: 0 -12px;
+        .item {
+            padding: 0 12px;
+        }
+        .btn {
+            min-width: 120px;
+        }
+    }
+}
