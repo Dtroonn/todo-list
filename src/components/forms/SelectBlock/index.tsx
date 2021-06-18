@@ -11,6 +11,8 @@ interface SelectBlockProps {
     items?: Array<any>;
     disabled?: boolean;
     onChange?: (...event: any[]) => void;
+    defaultValue?: string | number;
+    value?: string | number;
 }
 
 export const SelectBlock: React.FC<SelectBlockProps> = ({
@@ -19,10 +21,10 @@ export const SelectBlock: React.FC<SelectBlockProps> = ({
     items = [],
     disabled,
     onChange,
+    value,
 }) => {
-    const [selectedValue, setSelectedValue] = React.useState<string | number>('');
+    const [selectedValue, setSelectedValue] = React.useState<string | number>(value || 0);
     const [open, setOpen] = React.useState<boolean>(false);
-    const selectRef = React.useRef<HTMLDivElement>(null);
 
     const toggleOpen = () => setOpen((open) => !open);
 
@@ -41,23 +43,13 @@ export const SelectBlock: React.FC<SelectBlockProps> = ({
     };
 
     React.useEffect(() => {
-        const handleOutsideClick = (e: MouseEvent): void => {
-            const path = e.composedPath();
-
-            if (!path.includes(selectRef.current as unknown as EventTarget)) {
-                setOpen(false);
-            }
-        };
-        document.body.addEventListener('click', handleOutsideClick);
-        return () => {
-            document.body.removeEventListener('click', handleOutsideClick);
-        };
-    }, []);
+        if (typeof value !== 'undefined') {
+            setSelectedValue(value);
+        }
+    }, [value]);
 
     return (
-        <div
-            ref={selectRef}
-            className={clsx({ [classes.disabled]: disabled }, classes.selectBlock)}>
+        <div className={clsx({ [classes.disabled]: disabled }, classes.selectBlock)}>
             <div className={classes.body}>
                 <div onClick={toggleOpen} className={classes.header}>
                     <div

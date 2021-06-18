@@ -2,36 +2,65 @@ import React from 'react';
 
 import classes from './listItem.module.scss';
 
-export const ListItem = () => {
+interface ListItemProps {
+    name: string;
+    id: number;
+    description?: string;
+    category?: string | number;
+    onEditButtonClick?: (id: number) => void;
+    onDeleteButtonClick?: (id: number) => void;
+}
+
+export const ListItem: React.FC<ListItemProps> = ({
+    name,
+    id,
+    description,
+    category,
+    onEditButtonClick,
+    onDeleteButtonClick,
+}) => {
+    const handleEditButtonClick = () => {
+        if (onEditButtonClick) {
+            onEditButtonClick(id);
+        }
+    };
+
+    const handleDeleteButtonClick = () => {
+        if (onDeleteButtonClick) {
+            onDeleteButtonClick(id);
+        }
+    };
+
     return (
         <li className={classes.item}>
             <div className={classes.content}>
                 <div className={classes.header}>
-                    <div className={classes.title}>Задача1</div>
-                    <div className={classes.category}>
-                        <div className={classes.icon}>
-                            <svg
-                                width="24"
-                                height="20"
-                                viewBox="0 0 24 20"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M21.8823 3.21536H12.1365L10.1953 0.907127C10.1373 0.83748 10.0505 0.798421 9.95999 0.801245H2.11765C0.943765 0.812892 -0.00135149 1.76848 1.45074e-06 2.94242V17.0601C-5.73727e-05 18.2331 0.944706 19.1873 2.11765 19.1989H21.8823C23.0553 19.1873 24 18.2331 24 17.0601V5.35419C24 4.18119 23.0553 3.22701 21.8823 3.21536Z"
-                                    fill="#3F72AF"
-                                />
-                            </svg>
+                    <div className={classes.title}>{name}</div>
+                    {category && (
+                        <div className={classes.category}>
+                            <div className={classes.icon}>
+                                <svg
+                                    width="24"
+                                    height="20"
+                                    viewBox="0 0 24 20"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21.8823 3.21536H12.1365L10.1953 0.907127C10.1373 0.83748 10.0505 0.798421 9.95999 0.801245H2.11765C0.943765 0.812892 -0.00135149 1.76848 1.45074e-06 2.94242V17.0601C-5.73727e-05 18.2331 0.944706 19.1873 2.11765 19.1989H21.8823C23.0553 19.1873 24 18.2331 24 17.0601V5.35419C24 4.18119 23.0553 3.22701 21.8823 3.21536Z"
+                                        fill="#3F72AF"
+                                    />
+                                </svg>
+                            </div>
+                            <div className={classes.label}>{category}</div>
                         </div>
-                        <div className={classes.label}>Категория1</div>
-                    </div>
+                    )}
                 </div>
-                <div className={classes.description}>Описание задачи, может быть длинным</div>
+                <div className={classes.description}>
+                    {description ? description : 'Нет описания'}
+                </div>
             </div>
             <div className={classes.actions}>
-                <div className={classes.actionsItem}>
-                    <button></button>
-                </div>
-                <div className={classes.actionsItem}>
+                <div onClick={handleEditButtonClick} className={classes.actionsItem}>
                     <button>
                         <svg
                             width="24"
@@ -50,7 +79,7 @@ export const ListItem = () => {
                         </svg>
                     </button>
                 </div>
-                <div className={classes.actionsItem}>
+                <div onClick={handleDeleteButtonClick} className={classes.actionsItem}>
                     <button>
                         <svg
                             width="24"

@@ -1,9 +1,8 @@
-import { PayloadAction } from '@reduxjs/toolkit';
 import clsx from 'clsx';
 import React from 'react';
 import { useForm, SubmitHandler, Controller, FieldErrors } from 'react-hook-form';
 import { Category } from '../../../types/category';
-import { Todo } from '../../../types/todo';
+
 import { Button } from '../../forms/Button';
 import { SelectBlock } from '../../forms/SelectBlock';
 import { Textarea } from '../../forms/Textarea';
@@ -25,13 +24,20 @@ interface TodoPopupProps {
     categories?: Array<Category>;
     onClose?: (variant: VariantsListItemPopup) => void;
     onSubmitClick?: (variant: VariantsListItemPopup, data: any) => Promise<any>;
+    defaultValues?: IForm;
 }
 
 export interface IForm {
     name: string;
     category?: number;
-    description: string;
+    description?: string;
 }
+
+const defaultValuesObj: IForm = {
+    name: '',
+    category: 0,
+    description: '',
+};
 
 export const CreateAndEditListItemPopup: React.FC<TodoPopupProps> = ({
     open,
@@ -39,14 +45,9 @@ export const CreateAndEditListItemPopup: React.FC<TodoPopupProps> = ({
     categories,
     onClose,
     onSubmitClick,
+    defaultValues = defaultValuesObj,
 }) => {
     const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-    const defaultValues: IForm = {
-        name: '',
-        category: 0,
-        description: '',
-    };
 
     const { handleSubmit, control, unregister, reset } = useForm<IForm>({
         defaultValues,
@@ -58,7 +59,7 @@ export const CreateAndEditListItemPopup: React.FC<TodoPopupProps> = ({
         setIsErrors(false);
         if (onSubmitClick) {
             const action = await onSubmitClick(variant, data);
-            if (!action.error) {
+            if (!action?.error) {
                 reset(defaultValues);
             }
         }
@@ -71,14 +72,13 @@ export const CreateAndEditListItemPopup: React.FC<TodoPopupProps> = ({
     const isCategoryMode: boolean =
         variant === VariantsListItemPopup.EditCategory ||
         variant === VariantsListItemPopup.CreateCategory;
-    console.log(isCategoryMode);
 
     React.useEffect(() => {
         reset(defaultValues);
         if (isCategoryMode) {
             unregister('category');
         }
-    }, [isCategoryMode]);
+    }, [isCategoryMode, open]);
 
     const onClosePopupClick = () => {
         if (onClose) {
@@ -130,6 +130,7 @@ export const CreateAndEditListItemPopup: React.FC<TodoPopupProps> = ({
                                         onChange={onChange}
                                         placeholder="Выберите категорию"
                                         label="Категория"
+                                        value={value}
                                     />
                                 )}
                             />

@@ -1,3 +1,4 @@
+import { createTodo } from './../thunks/todos';
 import { Todo } from './../../types/todo';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { fetchTodos } from '../thunks/todos';
@@ -34,6 +35,14 @@ const todosSlice = createSlice({
             })
 
             .addCase(fetchTodos.rejected, (_, { error }) => {
+                window.alert(`Что-то пошло не так... (${error.message})`);
+            })
+
+            .addCase(createTodo.fulfilled, (state, { payload }: PayloadAction<Todo>) => {
+                state.items = [payload, ...state.items];
+            })
+
+            .addCase(createTodo.rejected, (_, { error }) => {
                 window.alert(`Что-то пошло не так... (${error.message})`);
             });
     },

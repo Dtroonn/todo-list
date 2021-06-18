@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { initializeApp } from '../thunks/initialize';
 
 interface InitializeState {
