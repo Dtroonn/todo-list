@@ -17,6 +17,21 @@ export const PopupTemplate: React.FC<PopupTemplateProps> = ({
     children,
     onClose,
 }) => {
+    const isFirstTimeDidMountRef = React.useRef(false);
+
+    React.useEffect(() => {
+        if (open) {
+            document.body.classList.add('lock');
+            return;
+        }
+        if (!open && isFirstTimeDidMountRef.current) {
+            setTimeout(() => {
+                document.body.classList.remove('lock');
+            }, 400);
+        }
+        isFirstTimeDidMountRef.current = true;
+    }, [open]);
+
     return (
         <div
             onClick={onClose}

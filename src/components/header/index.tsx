@@ -1,8 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, Route } from 'react-router-dom';
-import { setIsOpenCreateCategoryPopup } from '../../reduxToolkit/reducers/categories';
-import { setIsOpenCreateTodoPopup } from '../../reduxToolkit/reducers/todos';
+import { setFormListItemPopup } from '../../reduxToolkit/reducers/formListItemPopup';
+
+import { VariantsFormListItemPopup } from '../Popups/FormListItemPopup';
 
 import classes from './header.module.scss';
 
@@ -35,14 +36,28 @@ export const Header = () => {
                     </nav>
                     <Route path="/todos">
                         <div
-                            onClick={() => dispatch(setIsOpenCreateTodoPopup(true))}
+                            onClick={() =>
+                                dispatch(
+                                    setFormListItemPopup({
+                                        isOpen: true,
+                                        variant: VariantsFormListItemPopup.CreateTodo,
+                                    }),
+                                )
+                            }
                             className={classes.addButton}>
                             Добавить задачу
                         </div>
                     </Route>
                     <Route path="/categories">
                         <button
-                            onClick={() => dispatch(setIsOpenCreateCategoryPopup(true))}
+                            onClick={() =>
+                                dispatch(
+                                    setFormListItemPopup({
+                                        isOpen: true,
+                                        variant: VariantsFormListItemPopup.CreateCategory,
+                                    }),
+                                )
+                            }
                             className={classes.addButton}>
                             Добавить категорию
                         </button>

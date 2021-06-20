@@ -1,81 +1,130 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { shallowEqual, useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { setConfirmDeleteCategoryPopup } from '../../reduxToolkit/reducers/categories';
 
-import { setIsOpenCreateCategoryPopup } from '../../reduxToolkit/reducers/categories';
-import { setIsOpenCreateTodoPopup } from '../../reduxToolkit/reducers/todos';
-import { createCategory } from '../../reduxToolkit/thunks/categories';
-import { createTodo } from '../../reduxToolkit/thunks/todos';
+import { setFormListItemPopup } from '../../reduxToolkit/reducers/formListItemPopup';
+import { setConfirmDeleteTodoPopup } from '../../reduxToolkit/reducers/todos';
+import {
+    createCategory,
+    deleteCategory,
+    updateCategory,
+} from '../../reduxToolkit/thunks/categories';
+import { createTodo, deleteTodo, updateTodo } from '../../reduxToolkit/thunks/todos';
+import { selectCategories } from '../../selectors/categories';
+import { ConfirmDeleteListItemPopupData } from '../../types/common';
 import { ConfirmPopup } from './ConfirmPopup';
 import {
-    CreateAndEditListItemPopup,
-    IForm,
-    VariantsListItemPopup,
-} from './CreateAndEditListItemPopup';
+    FormListItemPopup,
+    FormListItemPopupValues,
+    VariantsFormListItemPopup,
+} from './FormListItemPopup';
 
 export const Popups: React.FC = ({ children }) => {
     const dispatch = useDispatch();
-    const { isOpenCreateTodoPopup, isOpenCreateCategoryPopup, editCategoryPopup, categories } =
-        useTypedSelector((state) => ({
-            isOpenCreateTodoPopup: state.todos.isOpenCreatePopup,
-            isOpenCreateCategoryPopup: state.categories.isOpenCreatePopup,
-            editCategoryPopup: state.categories.editPopup,
-            categories: state.categories.items,
-        }));
+    const { categories, formListItemPopup, confirmDeleteTodoPopup, confirmDeleteCategoryPopup } =
+        useTypedSelector(
+            (state) => ({
+                categories: selectCategories(state),
+                formListItemPopup: state.formListItemPopup,
+                confirmDeleteTodoPopup: state.todos.confirmDeleteTodoPopup,
+                confirmDeleteCategoryPopup: state.categories.confirmDeleteCategoryPopup,
+            }),
+            shallowEqual,
+        );
 
-    //Определяем какой вариант popup будет открыт(удаление/редактирование, категорий/задач)
-    //И будут ли начальные значения(defaultValues)
-    let variant: VariantsListItemPopup = VariantsListItemPopup.CreateTodo;
-    let defaultValuesListItemPopup: IForm | undefined;
-    if (isOpenCreateTodoPopup) {
-        variant = VariantsListItemPopup.CreateTodo;
-    }
-    if (isOpenCreateCategoryPopup) {
-        variant = VariantsListItemPopup.CreateCategory;
-    }
-    if (editCategoryPopup.isOpen) {
-        variant = VariantsListItemPopup.EditCategory;
-        defaultValuesListItemPopup = editCategoryPopup.data;
-    }
-    /////////////////////////////////////////////////////////////////////////////////
+    const handleCreateAndEditListItemPopupClose = React.useCallback(
+        (variant: VariantsFormListItemPopup): void => {
+            dispatch(
+                setFormListItemPopup({
+                    isOpen: false,
+                }),
+            );
+        },
+        [],
+    );
 
-    const handleCreateAndEditListItemPopupClose = (variant: VariantsListItemPopup): void => {
-        if (variant === VariantsListItemPopup.CreateTodo) {
-            dispatch(setIsOpenCreateTodoPopup(false));
-        }
-        if (variant === VariantsListItemPopup.CreateCategory) {
-            dispatch(setIsOpenCreateCategoryPopup(false));
-        }
+    const handleListItemPopupSubmit = React.useCallback(
+        (
+            variant: VariantsFormListItemPopup,
+            data: FormListItemPopupValues,
+            id: number = 0,
+        ): void => {
+            if (variant === VariantsFormListItemPopup.CreateTodo) {
+                console.log(data);
+                dispatch(createTodo(data));
+            }
+            if (variant === VariantsFormListItemPopup.CreateCategory) {
+                console.log(id);
+                dispatch(createCategory(data));
+            }
+
+            if (variant === VariantsFormListItemPopup.EditCategory) {
+                dispatch(
+                    updateCategory({
+                        id,
+                        data,
+                    }),
+                );
+            }
+
+            if (variant === VariantsFormListItemPopup.EditTodo) {
+                dispatch(
+                    updateTodo({
+                        id,
+                        data,
+                    }),
+                );
+            }
+        },
+        [],
+    );
+
+    const onDeleteTodoClick = (data: ConfirmDeleteListItemPopupData) => {
+        dispatch(deleteTodo(data.id));
     };
 
-    const onCreateListItemClick = async (
-        variant: VariantsListItemPopup,
-        data: IForm,
-    ): Promise<any> => {
-        if (variant === VariantsListItemPopup.CreateTodo) {
-            console.log(data);
-            return dispatch(createTodo(data));
-        }
-        if (variant === VariantsListItemPopup.CreateCategory) {
-            return dispatch(createCategory(data));
-        }
+    const onCloseConfirmDeleteTodoPopup = () => {
+        dispatch(setConfirmDeleteTodoPopup(false));
+    };
+
+    const onDeleteCategoryClick = (data: ConfirmDeleteListItemPopupData) => {
+        dispatch(deleteCategory(data.id));
+    };
+
+    const onCloseConfirmDeleteCategoryPopup = () => {
+        dispatch(setConfirmDeleteCategoryPopup(false));
     };
 
     return (
         <div>
-            <CreateAndEditListItemPopup
-                variant={variant}
-                open={isOpenCreateTodoPopup || isOpenCreateCategoryPopup}
+            <FormListItemPopup
+                variant={formListItemPopup.variant}
+                open={formListItemPopup.isOpen}
                 onClose={handleCreateAndEditListItemPopupClose}
-                onSubmitClick={onCreateListItemClick}
+                onSubmitClick={handleListItemPopupSubmit}
                 categories={categories}
-                defaultValues={defaultValuesListItemPopup}
+                defaultValues={formListItemPopup.defaultValues}
+                itemId={formListItemPopup.itemId}
+                loading={formListItemPopup.state}
             />
-            <ConfirmPopup title="Удаление задачи" open={false}>
-                Вы уверены, что хотите удалить задачу “Задача1”?
+            <ConfirmPopup
+                loading={confirmDeleteTodoPopup.isLoading}
+                onAcceptButtonClick={onDeleteTodoClick}
+                data={confirmDeleteTodoPopup.data}
+                title="Удаление задачи"
+                onClose={onCloseConfirmDeleteTodoPopup}
+                open={confirmDeleteTodoPopup.isOpen}>
+                {`Вы уверены, что хотите удалить задачу “${confirmDeleteTodoPopup.data.name}”?`}
             </ConfirmPopup>
-            <ConfirmPopup title="Удаление категории" open={false}>
-                Вы уверены, что хотите удалить категорию “Категория1”?
+            <ConfirmPopup
+                onClose={onCloseConfirmDeleteCategoryPopup}
+                onAcceptButtonClick={onDeleteCategoryClick}
+                loading={confirmDeleteCategoryPopup.isLoading}
+                data={confirmDeleteCategoryPopup.data}
+                open={confirmDeleteCategoryPopup.isOpen}
+                title="Удаление категории">
+                {`Вы уверены, что хотите удалить категорию “${confirmDeleteCategoryPopup.data.name}”?`}
             </ConfirmPopup>
         </div>
     );

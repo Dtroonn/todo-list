@@ -8,9 +8,24 @@ export const fetchTodos = createAsyncThunk<Array<Todo>>('todos/fetchTodos', asyn
 });
 
 export const createTodo = createAsyncThunk<Todo, TodoData>('todos/createTodo', async (data) => {
-    await new Promise((resolve, reject) => {
-        setTimeout(() => resolve('awdaw'), 5000);
-    });
     const todo: Todo = await TodoService.create(data);
     return todo;
+});
+
+export interface UpdateTodoArg {
+    data: TodoData;
+    id: number;
+}
+
+export const updateTodo = createAsyncThunk<Todo, UpdateTodoArg>(
+    'todos/updateTodo',
+    async (data) => {
+        const todo: Todo = await TodoService.update(data.id, data.data);
+        return todo;
+    },
+);
+
+export const deleteTodo = createAsyncThunk<number, number>('todos/deleteTodo', async (id) => {
+    await TodoService.delete(id);
+    return id;
 });

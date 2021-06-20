@@ -5,9 +5,10 @@ import classes from './list.module.scss';
 import { ListItem } from '../ListItem';
 import { Category } from '../../types/category';
 import { Todo } from '../../types/todo';
+import { TodoWithPopulateCategory } from '../../selectors/todos';
 
 interface ListProps {
-    items: Array<Category | Todo>;
+    items: Array<Category | TodoWithPopulateCategory>;
     onEditItemButtonClick?: (id: number) => void;
     onDeleteItemButtonClick?: (id: number) => void;
 }
