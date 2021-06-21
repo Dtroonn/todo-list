@@ -2,12 +2,10 @@ import React from 'react';
 
 import classes from './list.module.scss';
 
-import { ListItem } from '../ListItem';
-import { Category } from '../../types/category';
-import { TodoWithPopulateCategory } from '../../selectors/todos';
+import { IListItem, ListItem } from '../ListItem';
 
 interface ListProps {
-    items: Array<Category | TodoWithPopulateCategory>;
+    items: Array<IListItem>;
     onEditItemButtonClick?: (id: number) => void;
     onDeleteItemButtonClick?: (id: number) => void;
 }

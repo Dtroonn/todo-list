@@ -2,11 +2,14 @@ import React from 'react';
 
 import classes from './listItem.module.scss';
 
-interface ListItemProps {
+export interface IListItem {
     name: string;
     id: number;
     description?: string;
     category?: string | null;
+}
+
+interface ListItemProps extends IListItem {
     onEditButtonClick?: (id: number) => void;
     onDeleteButtonClick?: (id: number) => void;
 }
