@@ -1,4 +1,3 @@
-import { Todo } from './../types/todo';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from './../reduxToolkit/store';
 import { selectCategories } from './categories';

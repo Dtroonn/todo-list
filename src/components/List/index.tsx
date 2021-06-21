@@ -4,7 +4,6 @@ import classes from './list.module.scss';
 
 import { ListItem } from '../ListItem';
 import { Category } from '../../types/category';
-import { Todo } from '../../types/todo';
 import { TodoWithPopulateCategory } from '../../selectors/todos';
 
 interface ListProps {

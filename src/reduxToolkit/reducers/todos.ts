@@ -1,8 +1,4 @@
-import {
-    ConfirmDeleteListItemPopup,
-    ConfirmDeleteListItemPopupData,
-    SetConfirmDeleteItemPopupPayload,
-} from './../../types/common';
+import { ConfirmDeleteListItemPopup, SetConfirmDeleteItemPopupPayload } from './../../types/common';
 import { createTodo, deleteTodo, updateTodo } from './../thunks/todos';
 import { Todo } from './../../types/todo';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
